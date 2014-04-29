@@ -1,5 +1,5 @@
 "use strict";
-var options = require("./collector-config"),
+var options = require("./collector-config.js"),
     cube = require("../"),
     server = cube.server(options);
 
