@@ -21,14 +21,13 @@
                     type: "mytest",
                     time: new Date(),
                     data: {
-                        index: ++index,
                         v1: getRandomInt(1, 2),
                         v2: getRandomInt(0, 7),
                         v3: getRandomInt(10, 50)
                     }
                 }));
                 console.log("sent", index);
-            }, 1000);
+            }, 10000);
         };
 
         socket.onmessage = function (message) {
