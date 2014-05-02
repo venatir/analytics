@@ -1,3 +1,5 @@
 node_modules
 .jshintrc
 Procfile
+.idea/
+atlassian-ide-plugin.xml
