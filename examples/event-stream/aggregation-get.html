@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<h1>Streaming Events</h1>
+<h1>Streaming Aggregations</h1>
 
 <script>
-    var
-            addr = window.location.href,
-            parts = addr.split("?"),
-            query = parts[1],
-            i,
-            type,
-            index = 0,
-            socket;
-
+    var addr, parts, query, i, aggregation;
+    addr = window.location.href;
+    parts = addr.split("?");
+    query = parts[1];
     if (query) {
         parts = query.split("&");
         for (i = 0; i < parts.length; i++) {
             if (parts[i].search("type") === 0) {
                 parts = parts[i].split("=");
                 if (parts[1]) {
-                    type = parts[1];
+                    aggregation = parts[1];
                 }
             }
         }
     }
-    if (type) {
-
-        socket = new WebSocket("ws://localhost:1081/1.0/event/get");
+    if (aggregation) {
+        var socket, index = 0;
+        socket = new WebSocket("ws://localhost:1081/1.0/aggregation/get");
         socket.onopen = function () {
             console.log("connected!");
             socket.send(JSON.stringify({
-                type: "impressions",
+                aggregation: aggregation,
                 start: new Date()
             }));
         };
@@ -57,5 +52,4 @@
             console.log("error", error);
         };
     }
-
 </script>
