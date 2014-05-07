@@ -29,7 +29,7 @@
         socket.onopen = function () {
             console.log("connected!");
             socket.send(JSON.stringify({
-                type: "impressions",
+                type: type,
                 start: new Date()
             }));
         };

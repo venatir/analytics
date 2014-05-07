@@ -24,21 +24,24 @@
         socket.onopen = function () {
             console.log("connected!");
             socket.send(JSON.stringify({
-                aggregation: aggregation,
-                start: new Date()
-            }));
-        };
+                        aggregation: aggregation,
+                        start: new Date(new Date().getTime() - 60000)
+                    }
+            ))
+            ;
+        }
+        ;
 
         socket.onmessage = function (message) {
-            var event;
+            var aggregation;
             if (message) {
                 console.log(index++);
                 //                console.log(message);
                 if (message.data) {
-                    event = JSON.parse(message.data);
+                    aggregation = JSON.parse(message.data);
                     //                    console.log("received", message.data);
-                    if (event && event.data) {
-                        //                        console.log("received", event.data);
+                    if (aggregation && aggregation.data) {
+                        console.log("received", aggregation.data);
                     }
                 }
             }

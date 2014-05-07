@@ -18,7 +18,7 @@ module.exports = {
     "aggregations": [
         {
             "reagragatable": true,
-            "t1": [
+            "agg1": [
                 {
                     "$match": {
                         "type": "t1",
