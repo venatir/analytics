@@ -1,5 +1,4 @@
 "use strict";
-
 var options = require("./aggregator-config.js"),
     cube = require("../"),
     server = cube.server(options);

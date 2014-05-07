@@ -24,13 +24,11 @@
         socket.onopen = function () {
             console.log("connected!");
             socket.send(JSON.stringify({
-                        aggregation: aggregation,
-                        start: new Date(new Date().getTime() - 60000)
+                        name: aggregation,
+                        start: new Date(new Date().getTime() - 15 * 60000)
                     }
-            ))
-            ;
-        }
-        ;
+            ));
+        };
 
         socket.onmessage = function (message) {
             var aggregation;
