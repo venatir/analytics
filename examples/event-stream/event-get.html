@@ -30,7 +30,8 @@
             console.log("connected!");
             socket.send(JSON.stringify({
                 type: type,
-                start: new Date()
+                stop: new Date(),
+                start: new Date().getTime()-5*60*1000
             }));
         };
 
@@ -38,12 +39,12 @@
             var event;
             if (message) {
                 console.log(index++);
-                //                console.log(message);
+                //console.log(message);
                 if (message.data) {
                     event = JSON.parse(message.data);
-                    //                    console.log("received", message.data);
+                    //console.log("received", message.data);
                     if (event && event.data) {
-                        //                        console.log("received", event.data);
+                        //console.log("received", event.data);
                     }
                 }
             }
