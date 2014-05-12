@@ -44,8 +44,10 @@
                     }
                 }));
                 index++;
-                console.log("sent", index);
-            }, 100);
+                if (index % 100 === 0) {
+                    console.log("sent", index);
+                }
+            }, 5);
         };
 
         socket.onmessage = function (message) {
