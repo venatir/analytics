@@ -1,6 +1,8 @@
 "use strict";
 var options = require("./generator-config.js"),
-    samples = Math.floor(options.intervalInMS / options.sampleRateInMS);
+    samples = Math.floor(options.intervalInMS / options.sampleRateInMS),
+    WebSocket = require("ws"),
+    ws = new WebSocket('ws://www.host.com/path');
 
 function rnd_snd() {
     return (Math.random() * 2 - 1) + (Math.random() * 2 - 1) + (Math.random() * 2 - 1);
@@ -31,6 +33,28 @@ function computePacketsPerSampleInInterval(packets, samples) {
     return a;
 }
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function sendPacket() {
+    var country = options.data.country[getRandomInt(0, options.data.country.length - 1)],
+        gender = options.data.gender[getRandomInt(0, options.data.gender.length - 1)],
+        device = options.data.device[getRandomInt(0, options.data.device.length - 1)],
+        type = options.data.type[getRandomInt(0, options.data.device.type - 1)],
+        ws = new WebSocket('ws://localhost:1080/1.0/event/put');
+
+    ws.send(
+        JSON.stringify({
+            type: type,
+            data: {
+                v1: gender,
+                v2: device,
+                v3: country
+            }})
+    );
+}
+
 function sendPackets(n) {
     var i;
     for (i = 0; i < n; i++) {
@@ -44,3 +68,9 @@ function sendForIntervals(a) {
         setTimeout(sendPackets(a[i]), i * options.sampleRateInMS);
     }
 }
+
+ws.on('open', function () {
+    console.log("connected!");
+});
+
+sendForIntervals(computePacketsPerSampleInInterval)
