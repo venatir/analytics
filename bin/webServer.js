@@ -12,7 +12,7 @@ app.use("/", express.static('public'));
 // env
 
 app.set('port', process.env.port || port);
-app.set('views', path.join(__dirname, '/public/views'));
+app.set('views', path.join(__dirname, '/../public/views'));
 app.set('view engine', 'jade');
 app.disable('x-powered-by');
 
@@ -27,7 +27,8 @@ app.get('/:page', function (req, res) {
 });
 
 //public dir
-fs.readdir("public", function (err, files) {
+console.log(__dirname);
+fs.readdir(__dirname + "/../public/", function (err, files) {
     if (err) {
         throw  err;
     }
@@ -36,10 +37,11 @@ fs.readdir("public", function (err, files) {
             app.use(express.static('public/' + files[i]));
         }
     }
+    (function () {
+        http.createServer(app).listen(app.get('port'), function (req, res) {
+            util.log('View server listening on port ' + port);
+        });
+    }());
 });
 
-(function () {
-    http.createServer(app).listen(app.get('port'), function (req, res) {
-        util.log('View server listening on port ' + port);
-    });
-}());
+

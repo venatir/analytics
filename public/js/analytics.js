@@ -331,13 +331,13 @@ function RealTimeEvents() {
      * test
      */
     this.test = function () {
-        _this.setEventType('type1');
+        _this.setEventType('t1');
         _this.setChartAnchor('line-chart');
         _this.init();
     };
 
     // variables
-    this.eventType = 'type1';  // event type
+    this.eventType = 't1';  // event type
     this.chartAnchor = '';
     this.chartData = [];  // chartData should be formatted like {x: new Date, y: 130}...
     this._data = {};  // temporary data dictionary for aggregation
@@ -415,7 +415,6 @@ function RealTimeAggregations() {
                 .datum(chartData)
                 .transition().duration(1)
                 .call(chart);
-
             chart.update();
         });
 
@@ -728,7 +727,7 @@ function RealTimeAggregations() {
      * test
      */
     this.test = function () {
-        _this.setAggType('type1');
+        _this.setAggType('t1');
         _this.setChartAnchor('stack-charts');
         _this.init();
     };
@@ -769,8 +768,9 @@ function RealTimeAggregations() {
 }
 
 function testRealTime() {
-    var rte = new RealTimeEvents(),
-        rta = new RealTimeAggregations();
+    var rte = new RealTimeEvents();
+//,
+//        rta = new RealTimeAggregations();
     rte.test();
-    rta.test();
+//    rta.test();
 }
