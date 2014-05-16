@@ -7,4 +7,6 @@ lib
 node_modules
 tmp
 public/lib
+public/views/*.html
+public/views/includes/*.html
 
