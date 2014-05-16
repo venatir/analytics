@@ -1,5 +1,10 @@
-node_modules
+*.iml
+.idea
 .jshintrc
-Procfile
-.idea/
 atlassian-ide-plugin.xml
+bower_components
+lib
+node_modules
+tmp
+public/lib
+

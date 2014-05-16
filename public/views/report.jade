@@ -1,0 +1,11 @@
+extends layout
+block append content
+    div(id='filter', class='horizon', style='width: 750px')
+    div(id='chart', class='horizon', style='width: 750px')
+    div(id='dc-line-chart', class='horizon', style='width: 750px')
+    div(id='dc-range-chart', class='horizon', style='width: 750px')
+block append head-extra
+    link(rel="stylesheet", href='/css/cubism.css')
+
+block append footer-extra
+    script(src='/js/analytics.js')

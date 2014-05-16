@@ -1,0 +1,18 @@
+extends layout
+
+block append content
+    ul
+        li query
+            form(action='/api/mongo/query', method='post')
+                input(name='connectionName', value='localhost', placeholder='connection')
+                input(name='dbName', value='test', placeholder='database')
+                input(name='colName', placeholder='collection')
+                textarea(name='qry', rows='5', cols='50')
+                input(type='submit')
+        li aggregate
+            form(action='/api/mongo/aggregate', method='post')
+                input(name='connectionName', value='localhost', placeholder='connection')
+                input(name='dbName', value='test', placeholder='database')
+                input(name='colName', placeholder='collection')
+                textarea(name='aggPipe', rows='5', cols='50')
+                input(type='submit')

@@ -1,0 +1,10 @@
+extends layout
+
+block append content
+    div(id='line-chart', style='width: 750px;')
+    div(id='stack-charts', style='width: 750px;')
+block append footer-extra
+    script(type="text/javascript").
+        testRealTime()
+    //script(type="text/javascript").
+    //    quickDirtyAggregation()

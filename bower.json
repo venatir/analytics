@@ -1,0 +1,26 @@
+{
+    "name": "analytics",
+    "version": "0.0.1",
+    "ignore": [
+        ".jshintrc",
+        "**/*.txt",
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "2.1.0",
+        "bootstrap": "3.1.1",
+        "d3": "3.3.*",
+        "crossfilter": "1.2.0",
+        "nvd3": "1.1.*",
+        "dcjs": "1.6.0"
+    },
+    "directory": "public/lib",
+    "authors": [
+        "yeqing <tikazyq@gmail.com>"
+    ],
+    "license": "MIT"
+}
