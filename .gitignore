@@ -3,7 +3,6 @@
 .jshintrc
 atlassian-ide-plugin.xml
 bower_components
-lib
 node_modules
 tmp
 public/lib
