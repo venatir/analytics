@@ -62,8 +62,6 @@ function RealTimeEvents() {
             .transition().duration(1)
             .call(_this.chart);
 
-        _this.chart.update();
-
         //Figure out a good way to do this automatically
         nv.utils.windowResize(_this.chart.update);
 
@@ -213,9 +211,7 @@ function RealTimeEvents() {
             _this.resetData(function () {
                 _this._data = {};
                 _this.chartData = [];
-                //                _this.refreshAll();
             });
-            _this.socket.close();
         }
         _this.socket = new WebSocket(_this.socketConnection);
         _this.socket.onopen = function () {
@@ -415,7 +411,6 @@ function RealTimeAggregations() {
                 .datum(chartData)
                 .transition().duration(1)
                 .call(chart);
-            chart.update();
         });
 
         //Figure out a good way to do this automatically
@@ -484,6 +479,7 @@ function RealTimeAggregations() {
      * @param aggregationData
      */
     this.dataHandler = function (aggregationData) {
+//        console.log(JSON.flatten(aggregationData));//debug
         _this._data.push(JSON.flatten(aggregationData));
     };
 
@@ -598,9 +594,7 @@ function RealTimeAggregations() {
             _this.resetData(function () {
                 _this._data = [];
                 _this.chartData = [];
-                //                _this.refreshAll();
             });
-            _this.socket.close();
         }
         _this.socket = new WebSocket(_this.socketConnection);
         _this.socket.onopen = function () {
@@ -770,7 +764,7 @@ function RealTimeAggregations() {
 function testRealTime() {
     var rte = new RealTimeEvents();
 //,
-//        rta = new RealTimeAggregations();
+    window.rta = new RealTimeAggregations();
     rte.test();
-//    rta.test();
+    rta.test();
 }

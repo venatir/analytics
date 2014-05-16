@@ -256,13 +256,11 @@ JSON.flatten = function (data) {
     var result = {};
 
     function recurse(cur, prop) {
-        var property,
-            i,
-            l,
-            isEmpty;
-        if (Object.create(cur) !== cur) {
+        if (Object(cur) !== cur) {
             result[prop] = cur;
         } else if (Array.isArray(cur)) {
+            var i,
+                l;
             for (i = 0, l = cur.length; i < l; i++) {
                 recurse(cur[i], prop + "[" + i + "]");
             }
@@ -270,11 +268,12 @@ JSON.flatten = function (data) {
                 result[prop] = [];
             }
         } else {
-            isEmpty = true;
-            for (property in cur) {
-                if (cur.hasOwnProperty(property)) {
+            var isEmpty = true,
+                p;
+            for (p in cur) {
+                if (cur.hasOwnProperty(p)) {
                     isEmpty = false;
-                    recurse(cur[property], prop ? prop + "." + property : property);
+                    recurse(cur[p], prop ? prop + "." + p : p);
                 }
             }
             if (isEmpty && prop) {
