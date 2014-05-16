@@ -1,3 +1,6 @@
+"use strict";
+/*global document*/
+
 /**
  * get a column of multi-dimensional array or DataFrame-like array
  * @param index
@@ -7,7 +10,7 @@
 Array.prototype.getColumn = function (index, deep) {
     var ret = [],
         i;
-    if (typeof deep === 'undefined') {
+    if (deep === undefined) {
         deep = 0;
     }
     if (this[0] instanceof Object) {
@@ -75,7 +78,7 @@ Array.prototype.indexBy = function (key) {
  * @param direction
  */
 Array.prototype.sortBy = function (key, direction) {
-    if (direction == null) {
+    if (direction === null || direction === undefined) {
         direction = 'desc';
     }
     switch (("" + direction).toLowerCase()) {
@@ -105,7 +108,7 @@ Array.prototype.sortBy = function (key, direction) {
  * @param [indexes]
  */
 Array.prototype.ix = function (key, indexes) {
-    if (indexes == null) {
+    if (indexes === null || indexes === undefined) {
         return this.getColumn(key);
     }
     var lookup = this.indexMultiBy(key),
@@ -115,7 +118,7 @@ Array.prototype.ix = function (key, indexes) {
         indexes = [indexes];
     }
     for (i = 0; i < indexes.length; i++) {
-        if (lookup[indexes[i]] != null) {
+        if (lookup[indexes[i]] !== null) {
             ret.push(lookup[indexes[i]]);
         }
     }
@@ -127,8 +130,8 @@ Array.prototype.ix = function (key, indexes) {
  * @param keys
  */
 Array.prototype.icol = function (keys) {
-    if (keys == null) {
-        throw Error('keys should not be null');
+    if (keys === null || keys === undefined) {
+        throw new Error('keys should not be null');
     }
     if (!(keys instanceof Array)) {
         keys = [keys];
@@ -160,7 +163,7 @@ Array.prototype._sort = function (direction) {
             case 2:
                 return (a < b) ? 1 : -1;
             default :
-                return 1
+                return 1;
         }
     });
 };
@@ -187,9 +190,10 @@ Array.prototype.unique = function () {
  * @returns {*}
  */
 Array.prototype.max = function () {
-    var ret;
-    for (var i = 0; i < this.length; i++) {
-        if (typeof ret === "undefined") {
+    var ret,
+        i;
+    for (i = 0; i < this.length; i++) {
+        if (ret === undefined) {
             ret = this[i];
         }
         if (ret < this[i]) {
@@ -203,9 +207,10 @@ Array.prototype.max = function () {
  * @returns {*}
  */
 Array.prototype.min = function () {
-    var ret;
-    for (var i = 0; i < this.length; i++) {
-        if (typeof ret === "undefined") {
+    var ret,
+        i;
+    for (i = 0; i < this.length; i++) {
+        if (ret === undefined) {
             ret = this[i];
         }
         if (ret > this[i]) {
@@ -220,20 +225,25 @@ Array.prototype.min = function () {
  * @returns {*}
  */
 JSON.unflatten = function (data) {
-    "use strict";
-    if (Object(data) !== data || Array.isArray(data))
-        return data;
-    var regex = /\.?([^.\[\]]+)|\[(\d+)\]/g,
+    //noinspection JSLint
+    var property,
+        cur,
+        prop = "",
+        match,
+        regex = /\.?([^.\[\]]+)|\[(\d+)\]/g,
         resultholder = {};
-    for (var p in data) {
-        var cur = resultholder,
-            prop = "",
-            m;
-        while (m = regex.exec(p)) {
-            cur = cur[prop] || (cur[prop] = (m[2] ? [] : {}));
-            prop = m[2] || m[1];
+    if (Object.create(data) !== data || Array.isArray(data)) {
+        return data;
+    }
+    for (property in data) {
+        if (data.hasOwnProperty(property)) {
+            cur = resultholder;
+            while ((match = regex.exec(property)) !== false) {
+                cur = cur[prop] || (cur[prop] = (match[2] ? [] : {}));
+                prop = match[2] || match[1];
+            }
+            cur[prop] = data[property];
         }
-        cur[prop] = data[p];
     }
     return resultholder[""] || resultholder;
 };
@@ -246,21 +256,30 @@ JSON.flatten = function (data) {
     var result = {};
 
     function recurse(cur, prop) {
-        if (Object(cur) !== cur) {
+        var property,
+            i,
+            l,
+            isEmpty;
+        if (Object.create(cur) !== cur) {
             result[prop] = cur;
         } else if (Array.isArray(cur)) {
-            for (var i = 0, l = cur.length; i < l; i++)
+            for (i = 0, l = cur.length; i < l; i++) {
                 recurse(cur[i], prop + "[" + i + "]");
-            if (l == 0)
-                result[prop] = [];
-        } else {
-            var isEmpty = true;
-            for (var p in cur) {
-                isEmpty = false;
-                recurse(cur[p], prop ? prop + "." + p : p);
             }
-            if (isEmpty && prop)
+            if (l === 0) {
+                result[prop] = [];
+            }
+        } else {
+            isEmpty = true;
+            for (property in cur) {
+                if (cur.hasOwnProperty(property)) {
+                    isEmpty = false;
+                    recurse(cur[property], prop ? prop + "." + property : property);
+                }
+            }
+            if (isEmpty && prop) {
                 result[prop] = {};
+            }
         }
     }
 
@@ -307,7 +326,7 @@ function createElem(type, attrs, text) {
     var elem = document.createElement(type),
         attr;
 
-    if (typeof attrs !== "undefined" && attrs instanceof Object) {
+    if (attrs !== undefined && attrs instanceof Object) {
         for (attr in attrs) {
             if (attrs.hasOwnProperty(attr)) {
                 elem[attr] = attrs[attr];
@@ -315,7 +334,7 @@ function createElem(type, attrs, text) {
         }
     }
 
-    if (typeof text !== 'undefined') {
+    if (text !== undefined) {
         elem.innerText = text;
     }
 
@@ -329,7 +348,7 @@ function createElem(type, attrs, text) {
  * @returns {string}
  */
 String.prototype.replaceAll = function (oldVal, newVal) {
-    if (newVal == null) {
+    if (newVal === null || newVal === undefined) {
         newVal = '';
     }
     return this.split(oldVal).join(newVal);

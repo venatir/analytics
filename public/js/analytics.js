@@ -1,3 +1,11 @@
+"use strict";
+/*global nv*/
+/*global d3*/
+/*global $*/
+/*global createElem*/
+/*global WebSocket*/
+/*global crossfilter*/
+
 /**
  * create a real time instance for events line chart.
  * To make it work, an HTML element with a specific ID needs to be added in the HTML file.
@@ -6,6 +14,8 @@
  * rt.init();
  */
 function RealTimeEvents() {
+    var _this = this;
+
     /**
      * add chart object
      * @param callback
@@ -20,7 +30,7 @@ function RealTimeEvents() {
 
             _this.chart.xAxis // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly, return themselves, not the partent chart, so need to chain separately
                 .tickFormat(function (d) {
-                    return d3.time.format('%X')(new Date(d))
+                    return d3.time.format('%X')(new Date(d));
                 });
 
             _this.chart.yAxis
@@ -54,7 +64,7 @@ function RealTimeEvents() {
 
         _this.chart.update();
 
-        //TODO: Figure out a good way to do this automatically
+        //Figure out a good way to do this automatically
         nv.utils.windowResize(_this.chart.update);
 
         if (callback) {
@@ -67,11 +77,14 @@ function RealTimeEvents() {
      * @param callback
      */
     this.refreshChartData = function (callback) {
-        var timer = _this.timer;
+        var timer = _this.timer,
+            t,
+            x,
+            y;
         _this.chartData = [];
-        for (var t = timer.min; t < timer.now; t += 1e3) {
-            var x = new Date(t);
-            var y = _this._data[t] ? _this._data[t] : 0;
+        for (t = timer.min; t < timer.now; t += 1e3) {
+            x = new Date(t);
+            y = _this._data[t] || 0;
             _this.chartData.push({
                 x: x,
                 y: y
@@ -88,8 +101,8 @@ function RealTimeEvents() {
      * @param eventData
      */
     this.dataHandler = function (eventData) {
-        var t = eventData['time'] - eventData['time'] % 1e3;
-        if (typeof _this._data[t] === 'undefined') {
+        var t = eventData.time - eventData.time % 1e3;
+        if (_this._data[t] === undefined) {
             _this._data[t] = 0;
         }
         _this._data[t]++;
@@ -119,7 +132,7 @@ function RealTimeEvents() {
     this.updateTimer = function (callback) {
         var timer = _this.timer;
         timer.nowReal = new Date().getTime();
-        timer.now = timer.min = timer.nowReal - timer.nowReal % 1e3;
+        timer.now = timer.nowReal - timer.nowReal % 1e3;
         timer.min = timer.now - timer.timePeriod;  // start of chart
         timer.max = timer.now - timer.now % 1e3;
         if (callback) {
@@ -145,7 +158,7 @@ function RealTimeEvents() {
      * init HTML
      */
     this.initHtml = function (callback) {
-        if ($(_this.chartAnchor + ' svg').length == 0) {  // create svg
+        if ($(_this.chartAnchor + ' svg').length === 0) {  // create svg
             $(_this.chartAnchor)
                 .append(createElem('div', {className: 'control'}))  // for control buttons
                 .append('<svg/>')  // svg for chart
@@ -187,7 +200,7 @@ function RealTimeEvents() {
                         }, _this.refreshFrequency);
                     }, 1e3);
                 });
-            })
+            });
         });
     };
 
@@ -196,11 +209,11 @@ function RealTimeEvents() {
      * @param [callback]
      */
     this.initSocket = function (callback) {
-        if (_this.socket != null) {
+        if (_this.socket !== null) {
             _this.resetData(function () {
                 _this._data = {};
                 _this.chartData = [];
-//                _this.refreshAll();
+                //                _this.refreshAll();
             });
             _this.socket.close();
         }
@@ -324,7 +337,6 @@ function RealTimeEvents() {
     };
 
     // variables
-    var _this = this;
     this.eventType = 'type1';  // event type
     this.chartAnchor = '';
     this.chartData = [];  // chartData should be formatted like {x: new Date, y: 130}...
@@ -352,6 +364,8 @@ function RealTimeEvents() {
  * @type {RealTimeEvents}
  */
 function RealTimeAggregations() {
+    var _this = this;
+
     /**
      * add chart objects
      * @param callback
@@ -368,7 +382,7 @@ function RealTimeAggregations() {
 
                 chart.xAxis // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly, return themselves, not the partent chart, so need to chain separately
                     .tickFormat(function (d) {
-                        return d3.time.format('%X')(new Date(d))
+                        return d3.time.format('%X')(new Date(d));
                     });
 
                 chart.yAxis
@@ -405,8 +419,8 @@ function RealTimeAggregations() {
             chart.update();
         });
 
-        //TODO: Figure out a good way to do this automatically
-//        nv.utils.windowResize(_this.chart.update);
+        //Figure out a good way to do this automatically
+        //nv.utils.windowResize(_this.chart.update);
 
         if (callback) {
             callback();
@@ -421,9 +435,9 @@ function RealTimeAggregations() {
         _this.chartDataList = {};
         var ndx = crossfilter(_this._data),
             dimTime = ndx.dimension(function (d) {
-                return new Date(d['time']);
+                return new Date(d.time);
             });
-//        console.log(grpDimTime.all());//debug
+        //        console.log(grpDimTime.all());//debug
         _this.dimTargetKeys.forEach(function (dimTargetKey) {
             var chartData = [],  // store all data series for a stack chart
                 dimTarget = ndx.dimension(function (d) {
@@ -432,22 +446,25 @@ function RealTimeAggregations() {
                 dimTargetValsUniq = _this._data.ix(dimTargetKey).unique();
             dimTargetValsUniq.forEach(function (v) {
                 var t,
-                    tmp = {};
+                    tmp = {},
+                    values,
+                    x,
+                    y;
                 dimTarget.filter(v);
-                var values = dimTime.group().reduceSum(function (d) {
-                    return d['count'];
+                values = dimTime.group().reduceSum(function (d) {
+                    return d.count;
                 }).all();  // store values for one series in a stack chart
                 values.forEach(function (d) {
                     tmp[d.key.getTime()] = d.value;
                 });
                 values = [];
                 for (t = _this.timer.min; t < _this.timer.now; t += _this.resolution) {
-                    var x = new Date(t),
-                        y = tmp[t] ? tmp[t] : 0;
+                    x = new Date(t);
+                    y = tmp[t] || 0;
                     values.push({
                         x: x,
                         y: y
-                    })
+                    });
                 }
                 chartData.push({
                     key: v,
@@ -476,11 +493,11 @@ function RealTimeAggregations() {
      */
     this.resetData = function (callback) {
         var tmp = [];
-        _this._data.forEach((function (d) {
-            if (d['time'] >= _this.timer.min) {
+        _this._data.forEach(function (d) {
+            if (d.time >= _this.timer.min) {
                 tmp.push(d);
             }
-        }));
+        });
         _this._data = tmp;
         if (callback) {
             callback();
@@ -520,13 +537,12 @@ function RealTimeAggregations() {
     this.initHtml = function (callback) {
         var $tmp = $('<div/>'),
             $anchor = $(_this.chartAnchor),
-            $control = $(createElem('div', {className: 'control'}));  // elements in control block
-        // control block  TODO: add listeners to control stack area
-        var selectorLookup = {
-            'data.v1': ['male', 'female', 'all'],
-            'data.v2': ['web', 'android', 'web', 'all'],
-            'data.v3': ['GB', 'US', 'IN', 'JP', 'all']
-        };
+            $control = $(createElem('div', {className: 'control'})),  // elements in control block
+            selectorLookup = {
+                'data.v1': ['male', 'female', 'all'],
+                'data.v2': ['web', 'android', 'web', 'all'],
+                'data.v3': ['GB', 'US', 'IN', 'JP', 'all']
+            };// control block  TODO: add listeners to control stack area
         _this.dimTargetKeys.forEach(function (dimTargetKey) {
             var selectorId = _this.chartAnchor.replaceAll('#') + '-selector-' + dimTargetKey.replaceAll('.', '-'),
                 $selector = $(createElem('select', {id: selectorId}));
@@ -570,7 +586,7 @@ function RealTimeAggregations() {
                         }, _this.refreshFrequency);  // refresh frequency
                     }, 2e3);  // initial waiting time
                 });
-            })
+            });
         });
     };
 
@@ -579,11 +595,11 @@ function RealTimeAggregations() {
      * @param [callback]
      */
     this.initSocket = function (callback) {
-        if (_this.socket != null) {
+        if (_this.socket !== null || _this.socket !== undefined) {
             _this.resetData(function () {
                 _this._data = [];
                 _this.chartData = [];
-//                _this.refreshAll();
+                //                _this.refreshAll();
             });
             _this.socket.close();
         }
@@ -619,7 +635,10 @@ function RealTimeAggregations() {
      * @param [callback]
      */
     this.initListners = function (callback) {
-        //TODO
+        console.log("Not implemented yet");
+        if (callback) {
+            callback();
+        }
     };
 
     /**
@@ -715,7 +734,6 @@ function RealTimeAggregations() {
     };
 
     // variables
-    var _this = this;
     this.aggType = 'agg1';
     this.chartAnchor = '';
     this.chartDataList = {};
@@ -751,9 +769,8 @@ function RealTimeAggregations() {
 }
 
 function testRealTime() {
-    rte = new RealTimeEvents();
+    var rte = new RealTimeEvents(),
+        rta = new RealTimeAggregations();
     rte.test();
-
-    rta = new RealTimeAggregations();
     rta.test();
 }
