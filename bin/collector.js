@@ -1,10 +1,10 @@
 "use strict";
 var options = require("./collector-config.js"),
-    cube = require("../"),
-    server = cube.server(options);
+    analytics = require("../"),
+    server = analytics.server(options);
 
 server.register = function (dbs, endpoints, options) {
-    cube.collector.register(dbs, endpoints, options);
+    analytics.collector.register(dbs, endpoints, options);
 };
 
 server.start();
