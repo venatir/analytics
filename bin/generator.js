@@ -4,7 +4,6 @@ var options = require("./generator-config.js"),
     WS = require("ws"),
     ws = new WS('ws://localhost:1080/1.0/event/put'),
     randomTools = {
-
         basicGaussianRandom: function () {
             return (Math.random() * 2 - 1) + (Math.random() * 2 - 1) + (Math.random() * 2 - 1);
         },
@@ -17,13 +16,13 @@ var options = require("./generator-config.js"),
             if (x > max) {
                 return max;
             }
+            return x;
         },
 
         getRandomInt: function (min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
     },
-
     packetGenerator = {
         computePacketsPerSampleInInterval: function (packets, samples) {
             var a = [],
@@ -43,18 +42,18 @@ var options = require("./generator-config.js"),
             var country = options.data.country[randomTools.getRandomInt(0, options.data.country.length - 1)],
                 gender = options.data.gender[randomTools.getRandomInt(0, options.data.gender.length - 1)],
                 device = options.data.device[randomTools.getRandomInt(0, options.data.device.length - 1)],
-                type = options.data.type[randomTools.getRandomInt(0, options.data.device.type - 1)];
-            ws.send(
-                JSON.stringify({
+                type = options.data.type[randomTools.getRandomInt(0, options.data.type.length - 1)],
+                packet = JSON.stringify({
                     type: type,
                     data: {
                         v1: gender,
                         v2: device,
                         v3: country
-                    }})
-            );
+                    }
+                });
+            console.log(packet);
+            ws.send(packet);
         },
-
         sendPackets: function (n) {
             var i;
             for (i = 0; i < n; i++) {
@@ -62,16 +61,17 @@ var options = require("./generator-config.js"),
             }
         },
 
-        sendForIntervals: function (a) {
+        sendForPacketsForInterval: function (arrayOfPacketsInInterval) {
             var i;
-            for (i = 0; i < a.length; i++) {
-                setTimeout(this.sendPackets(a[i]), i * options.sampleRateInMS);
+            for (i = 0; i < arrayOfPacketsInInterval.length; i++) {
+                setTimeout(this.sendPackets(arrayOfPacketsInInterval[i]), i * options.sampleRateInMS);
             }
         }
     };
 
 ws.on('open', function () {
     console.log("connected!");
+    var arrayOfPacketsInInterval = packetGenerator.computePacketsPerSampleInInterval(options.packetsInInterval, samples);
+    packetGenerator.sendForPacketsForInterval(arrayOfPacketsInInterval);
 });
 
-packetGenerator.computePacketsPerSampleInInterval();
