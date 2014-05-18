@@ -51,20 +51,28 @@ var options = require("./generator-config.js"),
                         v3: country
                     }
                 });
-            console.log(packet);
+            //            console.log(packet);
             ws.send(packet);
         },
         sendPackets: function (n) {
             var i;
+            console.log((new Date()).getTime() + ": Sending packets: " + n);
             for (i = 0; i < n; i++) {
                 this.sendPacket();
             }
         },
 
         sendForPacketsForInterval: function (arrayOfPacketsInInterval) {
-            var i;
+            var i,
+                doSetTimeout = function (i) {
+                    setTimeout(function () {
+                            packetGenerator.sendPackets(arrayOfPacketsInInterval[i]);
+                        },
+                        i * options.sampleRateInMS);
+                };
+
             for (i = 0; i < arrayOfPacketsInInterval.length; i++) {
-                setTimeout(this.sendPackets(arrayOfPacketsInInterval[i]), i * options.sampleRateInMS);
+                doSetTimeout(i);
             }
         }
     };
