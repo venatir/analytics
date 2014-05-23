@@ -1,5 +1,5 @@
 module.exports = {
-    "packetsInInterval": 100000,
+    "packetsInInterval": 150000,
     "intervalInMS": 60000,
     "sampleRateInMS": 100,
     "data": {

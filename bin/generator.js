@@ -38,11 +38,10 @@ var options = require("./generator-config.js"),
             }
             return a;
         },
-        sendPacket: function () {
+        sendPacket: function (type) {
             var country = options.data.country[randomTools.getRandomInt(0, options.data.country.length - 1)],
                 gender = options.data.gender[randomTools.getRandomInt(0, options.data.gender.length - 1)],
                 device = options.data.device[randomTools.getRandomInt(0, options.data.device.length - 1)],
-                type = options.data.type[randomTools.getRandomInt(0, options.data.type.length - 1)],
                 packet = JSON.stringify({
                     type: type,
                     data: {
@@ -54,11 +53,11 @@ var options = require("./generator-config.js"),
             //            console.log(packet);
             ws.send(packet);
         },
-        sendPackets: function (n) {
+        sendPackets: function (n, type) {
             var i;
             console.log((new Date()).getTime() + ": Sending packets: " + n);
             for (i = 0; i < n; i++) {
-                this.sendPacket();
+                this.sendPacket(type);
             }
         },
 
@@ -66,7 +65,8 @@ var options = require("./generator-config.js"),
             var i,
                 doSetTimeout = function (i) {
                     setTimeout(function () {
-                            packetGenerator.sendPackets(arrayOfPacketsInInterval[i]);
+                            var type = options.data.type[randomTools.getRandomInt(0, options.data.type.length - 1)];
+                            packetGenerator.sendPackets(arrayOfPacketsInInterval[i], type);
                         },
                         i * options.sampleRateInMS);
                 };

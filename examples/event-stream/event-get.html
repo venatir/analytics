@@ -30,8 +30,7 @@
             console.log("connected!");
             socket.send(JSON.stringify({
                 type: type,
-                stop: new Date(),
-                start: new Date().getTime()-5*60*1000
+                start: new Date().getTime()-60*1000
             }));
         };
 

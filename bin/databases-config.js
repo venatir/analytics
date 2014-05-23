@@ -4,7 +4,8 @@ module.exports = {
         "mongo-port": 27017,
         "mongo-database": "events",
         "mongo-username": null,
-        "mongo-password": null
+        "mongo-password": null,
+        "collectionSize": 1024 * 1024 * 1024
     },
     aggregations: {
         "mongo-host": "192.168.56.101",
