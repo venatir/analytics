@@ -131,7 +131,7 @@ function Chart(config) {
     this.resume = function () {
         setTimeout(function () {
             that.intervalHandle = setInterval(function () {
-                that.refreshAll();
+                dc.redrawAll();
             }, config.refreshFrequency);
         }, 1e3);
     };
@@ -213,7 +213,7 @@ function Chart(config) {
             });
             this.crossfilter.remove();
             this.dimensionTime.filterAll();
-            this.refreshAll();
+            //            this.refreshAll();
         }
     };
 
@@ -349,50 +349,50 @@ function AggregatedChart(config) {
 AggregatedChart.prototype = Chart;
 
 var chartsConfig = [
-        //        {
-        //            name: "T1 Aggregations",
-        //            chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
-        //            renderingType: "xxx", //choose a style
-        //            chartParams: {
-        //                length: 3600 * 1e3, //1 hour
-        //                wsAddress: "ws://localhost:1081/1.0/aggregation/get",
-        //                query: {name: "agg1_1m"},
-        //                start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
-        //                stop: null, //null for a streaming chart
-        //                dimensionsNames: {
-        //                    "v1": "Gender",
-        //                    "v2": "Platform",
-        //                    "v3": "Country"
-        //                },
-        //                metricsNames: {
-        //                    c: "Count",
-        //                    rt: "Response time"
-        //                }
-        //            },
-        //            refreshFrequency: 10 * 1e3
-        //        }
-        {
-            name: "T1 Events",
-            chartType: "EventsChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
-            renderingType: "xxx", //choose a style
-            chartParams: {
-                length: 1e3,
-                wsAddress: "ws://localhost:1081/1.0/event/get",
-                query: {type: "t1"},
-                start: new Date(new Date().getTime() - 60 * 1e3), //miliseconds ago
-                stop: null, //null for a streaming chart
-                dimensionsNames: {
-                    "v1": "Gender",
-                    "v2": "Platform",
-                    "v3": "Country"
-                },
-                metricsNames: {
-                    c: "Count",
-                    rt: "Response time"
+//        {
+//            name: "T1 Aggregations",
+//            chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
+//            renderingType: "xxx", //choose a style
+//            chartParams: {
+//                length: 3600 * 1e3, //1 hour
+//                wsAddress: "ws://localhost:1081/1.0/aggregation/get",
+//                query: {name: "agg1_1m"},
+//                start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
+//                stop: null, //null for a streaming chart
+//                dimensionsNames: {
+//                    "v1": "Gender",
+//                    "v2": "Platform",
+//                    "v3": "Country"
+//                },
+//                metricsNames: {
+//                    c: "Count",
+//                    rt: "Response time"
+//                }
+//            },
+//            refreshFrequency: 10 * 1e3
+//        }
+                {
+                    name: "T1 Events",
+                    chartType: "EventsChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
+                    renderingType: "xxx", //choose a style
+                    chartParams: {
+                        length: 60 * 1e3,
+                        wsAddress: "ws://localhost:1081/1.0/event/get",
+                        query: {type: "t1"},
+                        start: new Date(new Date().getTime() - 60 * 1e3), //miliseconds ago
+                        stop: null, //null for a streaming chart
+                        dimensionsNames: {
+                            "v1": "Gender",
+                            "v2": "Platform",
+                            "v3": "Country"
+                        },
+                        metricsNames: {
+                            c: "Count",
+                            rt: "Response time"
+                        }
+                    },
+                    refreshFrequency: 1e3
                 }
-            },
-            refreshFrequency: 1e3
-        }
     ],
     charts = [],
     i;
