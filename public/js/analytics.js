@@ -121,6 +121,7 @@ function Chart(config) {
         that.refreshChart();
     };
     this.setChartAnchor = function (chartAnchor) {
+        //noinspection JSLint
         chartAnchor = chartAnchor.toLocaleLowerCase().replace(/[^a-z0-9]/g, "_");
         this.chartAnchor = chartAnchor;
         console.log(config.name + ": chartAnchor is set to " + this.chartAnchor);
@@ -131,7 +132,7 @@ function Chart(config) {
     this.resume = function () {
         setTimeout(function () {
             that.intervalHandle = setInterval(function () {
-                dc.redrawAll();
+                that.refreshAll();
             }, config.refreshFrequency);
         }, 1e3);
     };
@@ -164,6 +165,8 @@ function Chart(config) {
 
                 temp = {};
                 temp.name = i;
+                /*jshint -W083 */
+                //noinspection JSLint
                 (function (i, temp) {
                     temp.dimension = that.crossfilter.dimension(
                         function (d) {
@@ -220,7 +223,6 @@ function Chart(config) {
 }
 
 function EventsChart(config) {
-    var that = this;
     //defining dataHandler,chart and addCharts
     this.socketPacket = {
         type: config.chartParams.query.type,
@@ -231,99 +233,6 @@ function EventsChart(config) {
             return ("0" + new Date(d).getMinutes()).substr(-2) + ":" + ("0" + new Date(d).getSeconds()).substr(-2);
         });
     };
-    this.chartOLD = nv.models.lineChart();
-    this.addChartsOLD = function (callback) {
-        nv.addGraph(function () {
-            that.chart
-                .showLegend(false)
-                .margin({top: 10, bottom: 30, left: 60, right: 60})
-                .useInteractiveGuideline(true);
-
-            that.chart.xAxis // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly, return themselves, not the partent chart, so need to chain separately
-                .tickFormat(function (d) {
-                    return d3.time.format('%X')(new Date(d));
-                });
-
-            that.chart.yAxis
-                .tickFormat(function (d) {
-                    return d3.format('d')(d);
-                })
-                .axisLabel('Count');
-            return that.chart;
-        });
-
-        if (callback) {
-            callback();
-        }
-    };
-    this.refreshChartOLD = function (callback) {
-        if (that.transitionDuration === undefined) {
-            that.transitionDuration = 1;
-        }
-        d3.select("#" + that.chartAnchor + ' svg')
-            .datum([
-                {
-                    key: 'Events',
-                    values: that.chartData
-                }
-            ])
-            .transition().duration(that.transitionDuration)
-            .call(that.chart);
-
-        //Figure out a good way to do this automatically
-        nv.utils.windowResize(that.chart.update);
-
-        if (callback) {
-            callback();
-        }
-    };
-    this.dataHandlerOLD = function (eventCounts) {
-        var t,
-            i;
-
-        if (eventCounts && eventCounts.length > 0) {
-            for (i = 0; i < eventCounts.length; i++) {
-                if (eventCounts[i]._id && eventCounts[i].count) {
-                    this.data[eventCounts[i]._id] = eventCounts[i].count;
-                }
-            }
-        }
-        t = (new Date()).getTime();
-        t = t - t % 1e3;
-        if (this.data[t] === undefined) {
-            this.data[t] = 0;
-        }
-
-        while (this.chartData.length > 60) {
-            t = this.chartData[0].x.getTime();
-            delete this.data[t];
-            this.chartData.shift();
-        }
-        //convert data intro chartData
-        this.chartData = [];
-        for (i in this.data) {
-            if (this.data.hasOwnProperty(i)) {
-                this.chartData.push({x: new Date(parseInt(i, 10)), y: this.data[i]});
-            }
-        }
-        this.chartData.sort(function (a, b) {
-            return a.x.getTime() - b.x.getTime();
-        });
-
-    };
-    this.initCustomForChartOLD = function (callback) {
-        var currentTime = new Date().getTime(),
-            i;
-        currentTime = currentTime - currentTime % 1000;
-        for (i = currentTime - 60 * 1e3; i <= currentTime + 1e3; i += 1000) {
-            this.data[i] = 0;
-        }
-
-        if (callback) {
-            callback();
-        }
-    };
-
     //applying the upper level constructor
     this.baseClass = Chart;
     this.baseClass(config);
@@ -349,50 +258,50 @@ function AggregatedChart(config) {
 AggregatedChart.prototype = Chart;
 
 var chartsConfig = [
-//        {
-//            name: "T1 Aggregations",
-//            chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
-//            renderingType: "xxx", //choose a style
-//            chartParams: {
-//                length: 3600 * 1e3, //1 hour
-//                wsAddress: "ws://localhost:1081/1.0/aggregation/get",
-//                query: {name: "agg1_1m"},
-//                start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
-//                stop: null, //null for a streaming chart
-//                dimensionsNames: {
-//                    "v1": "Gender",
-//                    "v2": "Platform",
-//                    "v3": "Country"
-//                },
-//                metricsNames: {
-//                    c: "Count",
-//                    rt: "Response time"
-//                }
-//            },
-//            refreshFrequency: 10 * 1e3
-//        }
-                {
-                    name: "T1 Events",
-                    chartType: "EventsChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
-                    renderingType: "xxx", //choose a style
-                    chartParams: {
-                        length: 60 * 1e3,
-                        wsAddress: "ws://localhost:1081/1.0/event/get",
-                        query: {type: "t1"},
-                        start: new Date(new Date().getTime() - 60 * 1e3), //miliseconds ago
-                        stop: null, //null for a streaming chart
-                        dimensionsNames: {
-                            "v1": "Gender",
-                            "v2": "Platform",
-                            "v3": "Country"
-                        },
-                        metricsNames: {
-                            c: "Count",
-                            rt: "Response time"
-                        }
-                    },
-                    refreshFrequency: 1e3
+        {
+            name: "T1 Aggregations",
+            chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
+            renderingType: "xxx", //choose a style
+            chartParams: {
+                length: 3600 * 1e3, //1 hour
+                wsAddress: "ws://localhost:1081/1.0/aggregation/get",
+                query: {name: "agg1_1m"},
+                start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
+                stop: null, //null for a streaming chart
+                dimensionsNames: {
+                    "v1": "Gender",
+                    "v2": "Platform",
+                    "v3": "Country"
+                },
+                metricsNames: {
+                    c: "Count",
+                    rt: "Response time"
                 }
+            },
+            refreshFrequency: 10 * 1e3
+        }
+//                {
+        //                    name: "T1 Events",
+        //                    chartType: "EventsChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
+        //                    renderingType: "xxx", //choose a style
+        //                    chartParams: {
+        //                        length: 60 * 1e3,
+        //                        wsAddress: "ws://localhost:1081/1.0/event/get",
+        //                        query: {type: "t1"},
+        //                        start: new Date(new Date().getTime() - 60 * 1e3), //miliseconds ago
+        //                        stop: null, //null for a streaming chart
+        //                        dimensionsNames: {
+        //                            "v1": "Gender",
+        //                            "v2": "Platform",
+        //                            "v3": "Country"
+        //                        },
+        //                        metricsNames: {
+        //                            c: "Count",
+        //                            rt: "Response time"
+        //                        }
+        //                    },
+        //                    refreshFrequency: 1e3
+        //                }
     ],
     charts = [],
     i;
