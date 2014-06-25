@@ -7,9 +7,12 @@ SCRIPTDIR=`pwd`;
 BINDIR=${SCRIPTDIR}/bin;
 LOGSDIR=${SCRIPTDIR}/logs;
 
-node=`which node`;
+node=`which nodejs`;
 if [[ -z ${node} ]]; then
-    node="/usr/local/bin/node"; #fallback
+    node=`which node`;
+    if [[ -z ${node} ]]; then
+        node="/usr/local/bin/node"; #fallback
+    fi
 fi
 
 if [ ! -f "${node}" ]; then
