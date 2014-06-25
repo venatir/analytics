@@ -61,7 +61,7 @@ var options = require("./generator-config.js"),
             }
         },
 
-        sendForPacketsForInterval: function (arrayOfPacketsInInterval) {
+        sendForPacketsForInterval: function (arrayOfPacketsInInterval, callback) {
             var i,
                 doSetTimeout = function (i) {
                     setTimeout(function () {
@@ -74,12 +74,15 @@ var options = require("./generator-config.js"),
             for (i = 0; i < arrayOfPacketsInInterval.length; i++) {
                 doSetTimeout(i);
             }
+            setTimeout(callback, arrayOfPacketsInInterval.length * options.sampleRateInMS);
         }
     };
 
 ws.on('open', function () {
     console.log("connected!");
     var arrayOfPacketsInInterval = packetGenerator.computePacketsPerSampleInInterval(options.packetsInInterval, samples);
-    packetGenerator.sendForPacketsForInterval(arrayOfPacketsInInterval);
+    packetGenerator.sendForPacketsForInterval(arrayOfPacketsInInterval, function () {
+        ws.close();
+    });
 });
 

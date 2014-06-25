@@ -1,6 +1,6 @@
 module.exports = {
     events: {
-        "mongo-host": "192.168.56.101",
+        "mongo-host": "localhost",
         "mongo-port": 27017,
         "mongo-database": "events",
         "mongo-username": null,
@@ -8,7 +8,7 @@ module.exports = {
         "collectionSize": 1024 * 1024 * 1024
     },
     aggregations: {
-        "mongo-host": "192.168.56.101",
+        "mongo-host": "localhost",
         "mongo-port": 27017,
         "mongo-database": "aggregations",
         "mongo-username": null,

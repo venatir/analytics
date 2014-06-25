@@ -97,27 +97,27 @@ function Chart(config) {
                 .append('<svg/>');  // svg for chart
         }
 
-        $("#" + this.chartAnchor + ' .control')
-            .append(myUtils.createElem('p'))
-            .append(myUtils.createElem('button', {className: 'pause'}, 'Pause'))  // pause button
-            .append(myUtils.createElem('button', {className: 'resume'}, 'Resume'))  // resume
-        ;
-
-        $("#" + this.chartAnchor + ' button.pause')
-            .click(function () {
-                that.pause();
-            })
-        ;
-        $("#" + this.chartAnchor + ' button.resume')
-            .click(function () {
-                that.resume();
-            });
         if (callback) {
             callback();
         }
     };
     this.refreshAll = function () {
-        // - no need for now - this.dataHandler();
+        var control,
+            i,
+            selectElem,
+            optionElem;
+        control = $("#" + this.chartAnchor + ' .control');
+        control.append(myUtils.createElem('p'));
+
+        if (this.dimensions && Array.isArray(this.dimensions)) {
+            for (i = 0; i < this.dimensions.length; i++) {
+                selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
+
+                selectElem.add(myUtils.createElem('option', {"value": 1}));
+                control.append(selectElem);
+            }
+        }
+
         that.refreshChart();
     };
     this.setChartAnchor = function (chartAnchor) {
@@ -280,7 +280,7 @@ var chartsConfig = [
             },
             refreshFrequency: 10 * 1e3
         }
-//                {
+        //                {
         //                    name: "T1 Events",
         //                    chartType: "EventsChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
         //                    renderingType: "xxx", //choose a style
