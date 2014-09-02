@@ -109,14 +109,14 @@ function Chart(config) {
         control = $("#" + this.chartAnchor + ' .control');
         control.append(myUtils.createElem('p'));
 
-        //if (this.dimensions && Array.isArray(this.dimensions)) {
-        //    for (i = 0; i < this.dimensions.length; i++) {
-        //        selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
-        //
-        //        selectElem.add(myUtils.createElem('option', {"value": 1}));
-        //        control.append(selectElem);
-        //    }
-        //}
+        if (this.dimensions && Array.isArray(this.dimensions)) {
+            for (i = 0; i < this.dimensions.length; i++) {
+                selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
+
+                selectElem.add(myUtils.createElem('option', {"value": 1}));
+                control.append(selectElem);
+            }
+        }
 
         that.refreshChart();
     };
