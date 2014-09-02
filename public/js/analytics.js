@@ -259,7 +259,7 @@ AggregatedChart.prototype = Chart;
 
 var chartsConfig = [
         {
-            name: "T1 Aggregations",
+            name: "Wants Aggregations",
             chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
             renderingType: "xxx", //choose a style
             chartParams: {
@@ -269,9 +269,8 @@ var chartsConfig = [
                 start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
                 dimensionsNames: {
-                    "v1": "Gender",
-                    "v2": "Platform",
-                    "v3": "Country"
+                    "v1": "Server",
+                    "v2": "Subject"
                 },
                 metricsNames: {
                     c: "Count",
