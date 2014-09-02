@@ -2,17 +2,26 @@ module.exports = {
     "aggregations": [
         {
             "reaggragatable": true,
-            "agg1": [
+            "banners": [
                 {
                     "$match": {
+<<<<<<< HEAD
                         "type": "want" //mandatory
+=======
+                        "type": "web.trending.banners" //mandatory
+>>>>>>> 69cd0ded9085104d0d1cb79802957c6a0e1ba1f4
                     }},
                 {
                     "$project": {
                         _id: 0,
                         type: "$type",
+<<<<<<< HEAD
                         v1: "$d.srv",
                         v2: "$d.sbj"
+=======
+                        v1: "$d.pagetype",
+                        v2: "$d.u_gdr"
+>>>>>>> 69cd0ded9085104d0d1cb79802957c6a0e1ba1f4
                     }
                 },
                 {
@@ -24,9 +33,6 @@ module.exports = {
                         },
                         "count": {
                             $sum: 1
-                        },
-                        "index": {
-                            $avg: "$index"
                         }
                     }
                 }
