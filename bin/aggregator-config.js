@@ -2,7 +2,7 @@ module.exports = {
     "aggregations": [
         {
             "reaggragatable": true,
-            "banners": [
+            "web_banners_impressions": [
                 {
                     "$match": {
 <<<<<<< HEAD
