@@ -5,47 +5,14 @@ module.exports = {
             "agg1": [
                 {
                     "$match": {
-                        "type": "t1" //mandatory
+                        "type": "want" //mandatory
                     }},
                 {
                     "$project": {
                         _id: 0,
                         type: "$type",
-                        v1: "$d.v1",
-                        v2: "$d.v2",
-                        v3: {
-                            $cond: [
-                                {
-                                    $eq: ["$d.v3", "US"]
-                                },
-                                "US",
-                                {
-                                    $cond: [
-                                        {
-                                            $eq: ["$d.v3", "GB"]
-                                        },
-                                        "GB",
-                                        {
-                                            $cond: [
-                                                {
-                                                    $eq: ["$d.v3", "JP"]
-                                                },
-                                                "JP",
-                                                {
-                                                    $cond: [
-                                                        {
-                                                            $eq: ["$d.v3", "IN"]
-                                                        },
-                                                        "IN",
-                                                        "OTHER"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
+                        v1: "$d.srv",
+                        v2: "$d.sbj"
                     }
                 },
                 {
@@ -53,8 +20,7 @@ module.exports = {
                         "_id": {
                             "type": "$type",
                             "v1": "$v1",
-                            "v2": "$v2",
-                            "v3": "$v3"
+                            "v2": "$v2"
                         },
                         "count": {
                             $sum: 1
