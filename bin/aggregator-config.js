@@ -2,50 +2,17 @@ module.exports = {
     "aggregations": [
         {
             "reaggragatable": true,
-            "agg1": [
+            "banners": [
                 {
                     "$match": {
-                        "type": "t1" //mandatory
+                        "type": "web.trending.banners" //mandatory
                     }},
                 {
                     "$project": {
                         _id: 0,
                         type: "$type",
-                        v1: "$d.v1",
-                        v2: "$d.v2",
-                        v3: {
-                            $cond: [
-                                {
-                                    $eq: ["$d.v3", "US"]
-                                },
-                                "US",
-                                {
-                                    $cond: [
-                                        {
-                                            $eq: ["$d.v3", "GB"]
-                                        },
-                                        "GB",
-                                        {
-                                            $cond: [
-                                                {
-                                                    $eq: ["$d.v3", "JP"]
-                                                },
-                                                "JP",
-                                                {
-                                                    $cond: [
-                                                        {
-                                                            $eq: ["$d.v3", "IN"]
-                                                        },
-                                                        "IN",
-                                                        "OTHER"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
+                        v1: "$d.pagetype",
+                        v2: "$d.u_gdr"
                     }
                 },
                 {
@@ -53,14 +20,10 @@ module.exports = {
                         "_id": {
                             "type": "$type",
                             "v1": "$v1",
-                            "v2": "$v2",
-                            "v3": "$v3"
+                            "v2": "$v2"
                         },
                         "count": {
                             $sum: 1
-                        },
-                        "index": {
-                            $avg: "$index"
                         }
                     }
                 }

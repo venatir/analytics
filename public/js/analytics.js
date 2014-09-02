@@ -111,10 +111,11 @@ function Chart(config) {
 
         if (this.dimensions && Array.isArray(this.dimensions)) {
             for (i = 0; i < this.dimensions.length; i++) {
-                selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
-
-                selectElem.add(myUtils.createElem('option', {"value": 1}));
-                control.append(selectElem);
+                if ($('#' + this.chartAnchor + "-" + this.dimensions[i].name).length == 0) {
+                    selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
+                    selectElem.add(myUtils.createElem('option', {"value": 1}, "asdasd"));
+                    control.append(selectElem);
+                }
             }
         }
 
@@ -264,7 +265,7 @@ var chartsConfig = [
             renderingType: "xxx", //choose a style
             chartParams: {
                 length: 3600 * 1e3, //1 hour
-                wsAddress: "ws://"+window.location.hostname+":1081/1.0/aggregation/get",
+                wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
                 query: {name: "agg1_1m"},
                 start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
@@ -272,9 +273,14 @@ var chartsConfig = [
                     "v1": "Server",
                     "v2": "Subject"
                 },
-                metricsNames: {
-                    c: "Count",
-                    rt: "Response time"
+                dimensionOptions: {
+                    "v1": [
+                        "eu1",
+                        "eu2"
+                    ],
+                    "v2": [
+                        "type"
+                    ]
                 }
             },
             refreshFrequency: 10 * 1e3
