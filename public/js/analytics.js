@@ -266,7 +266,7 @@ var chartsConfig = [
             chartParams: {
                 length: 3600 * 1e3, //1 hour
                 wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
-                query: {name: "web_banners_impressions"},
+                query: {name: "web_banners_impressions_1m"},
                 start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
                 dimensionsNames: {
