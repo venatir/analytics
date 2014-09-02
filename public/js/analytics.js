@@ -264,7 +264,7 @@ var chartsConfig = [
             renderingType: "xxx", //choose a style
             chartParams: {
                 length: 3600 * 1e3, //1 hour
-                wsAddress: "ws://eu1.analytics.shopcade.com:1081/1.0/aggregation/get",
+                wsAddress: "ws://"+window.location.hostname+":1081/1.0/aggregation/get",
                 query: {name: "agg1_1m"},
                 start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
