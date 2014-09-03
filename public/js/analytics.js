@@ -290,10 +290,10 @@ var chartsConfig = [
             chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
             renderingType: "xxx", //choose a style
             chartParams: {
-                length: 3600 * 1e3, //1 hour
+                length: 10 * 3600 * 1e3, //1 hour
                 wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
                 query: {name: "mobile_banners_impressions_1m"},
-                start: new Date(new Date().getTime() - 10*3600 * 1e3), //miliseconds ago
+                start: new Date(new Date().getTime() - 10 * 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
                 dimensionsNames: {
                     "v1": "pagetype",
@@ -311,28 +311,6 @@ var chartsConfig = [
             },
             refreshFrequency: 10 * 1e3
         }
-        //                {
-        //                    name: "T1 Events",
-        //                    chartType: "EventsChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
-        //                    renderingType: "xxx", //choose a style
-        //                    chartParams: {
-        //                        length: 60 * 1e3,
-        //                        wsAddress: "ws://localhost:1081/1.0/event/get",
-        //                        query: {type: "t1"},
-        //                        start: new Date(new Date().getTime() - 60 * 1e3), //miliseconds ago
-        //                        stop: null, //null for a streaming chart
-        //                        dimensionsNames: {
-        //                            "v1": "Gender",
-        //                            "v2": "Platform",
-        //                            "v3": "Country"
-        //                        },
-        //                        metricsNames: {
-        //                            c: "Count",
-        //                            rt: "Response time"
-        //                        }
-        //                    },
-        //                    refreshFrequency: 1e3
-        //                }
     ],
     charts = [],
     i;
