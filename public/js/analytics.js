@@ -260,13 +260,39 @@ AggregatedChart.prototype = Chart;
 
 var chartsConfig = [
         {
-            name: "Wants Aggregations",
+            name: "Web Banner Impressions",
             chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
             renderingType: "xxx", //choose a style
             chartParams: {
                 length: 3600 * 1e3, //1 hour
                 wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
                 query: {name: "web_banners_impressions_1m"},
+                start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
+                stop: null, //null for a streaming chart
+                dimensionsNames: {
+                    "v1": "pagetype",
+                    "v2": "gender"
+                },
+                dimensionOptions: {
+                    "v1": [
+                        "eu1",
+                        "eu2"
+                    ],
+                    "v2": [
+                        "type"
+                    ]
+                }
+            },
+            refreshFrequency: 10 * 1e3
+        },
+        {
+            name: "Mobile Banner Impressions",
+            chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
+            renderingType: "xxx", //choose a style
+            chartParams: {
+                length: 3600 * 1e3, //1 hour
+                wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
+                query: {name: "mobile_banners_impressions_1m"},
                 start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
                 dimensionsNames: {
