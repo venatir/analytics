@@ -113,7 +113,13 @@ function Chart(config) {
             for (i = 0; i < this.dimensions.length; i++) {
                 if ($('#' + this.chartAnchor + "-" + this.dimensions[i].name).length == 0) {
                     selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
-                    selectElem.add(myUtils.createElem('option', {"value": 1}, "asdasd"));
+                    selectElem.add(myUtils.createElem('option', {"value": 'all'}, 'All'));  // add all selector
+                    // get unique elements of the dimension
+                    this.dimensions[i].dimension.group().all().map(function (d) {
+                        return d.key;
+                    }).forEach(function (d) {
+                        selectElem.add(myUtils.createElem('option', {"value": d}, d));
+                    });
                     control.append(selectElem);
                 }
             }
@@ -183,7 +189,7 @@ function Chart(config) {
             return d.t;
         });
         this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
-            return d.count;
+            return d.count; //TODO: make this variable
         });
 
         if (callback) {
@@ -264,7 +270,7 @@ var chartsConfig = [
             chartType: "AggregatedChart", //can be "EventsChart" or "AggregatedChart" - meaning one or multiple dimensions
             renderingType: "xxx", //choose a style
             chartParams: {
-                length: 3600 * 1e3, //1 hour
+                length: 12 * 3600 * 1e3, //1 hour
                 wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
                 query: {name: "web_banners_impressions_1m"},
                 start: new Date(new Date().getTime() - 3600 * 1e3), //miliseconds ago
