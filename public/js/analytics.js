@@ -299,7 +299,7 @@ var chartsConfig = [
                 length: 12 * 3600 * 1e3, //1 hour
                 wsAddress: "ws://" + window.location.hostname + ":1081/1.0/aggregation/get",
                 query: {name: "mobile_banners_impressions_1m"},
-                start: new Date(new Date().getTime() - 10 * 3600 * 1e3), //miliseconds ago
+                start: new Date(new Date().getTime() - 12 * 3600 * 1e3), //miliseconds ago
                 stop: null, //null for a streaming chart
                 dimensionsNames: {
                     "v1": "pagetype",
