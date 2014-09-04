@@ -197,7 +197,7 @@ function Chart(config) {
     };
     this.refreshChart = function (callback) {
         this.chart.x(d3.scale.linear().domain([new Date().getTime() - config.chartParams.length, new Date().getTime()]));
-        that.chart.redraw();
+        this.chart.redraw();
         if (callback) {
             callback();
         }
