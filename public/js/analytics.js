@@ -192,6 +192,7 @@ function Chart(config) {
         });
 
         if (callback) {
+            this.refreshChart();
             callback();
         }
     };
