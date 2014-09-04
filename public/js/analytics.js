@@ -114,8 +114,7 @@ function Chart(config) {
                 if ($('#' + this.chartAnchor + "-" + this.dimensions[i].name).length == 0) {
                     selectElem = myUtils.createElem('select', {className: 'select', id: this.chartAnchor + "-" + this.dimensions[i].name});
                     selectElem.add(myUtils.createElem('option', {"value": 'all'}, 'All'));  // add all selector
-                    // get unique elements of the dimension
-                    this.dimensions[i].dimension.group().all().map(function (d) {
+                    this.dimensions[i].dimension.group().all().map(function (d) {// get unique elements of the dimension
                         return d.key;
                     }).forEach(function (d) {
                         selectElem.add(myUtils.createElem('option', {"value": d}, d));
@@ -198,7 +197,7 @@ function Chart(config) {
     };
     this.refreshChart = function (callback) {
         this.chart.x(d3.scale.linear().domain([new Date().getTime() - config.chartParams.length, new Date().getTime()]));
-        dc.renderAll();
+        that.chart.redraw();
         if (callback) {
             callback();
         }
