@@ -192,13 +192,12 @@ function Chart(config) {
         });
 
         if (callback) {
-            this.refreshChart();
             callback();
         }
     };
     this.refreshChart = function (callback) {
         this.chart.x(d3.scale.linear().domain([new Date().getTime() - config.chartParams.length, new Date().getTime()]));
-        this.chart.redraw();
+        this.chart.render();
         if (callback) {
             callback();
         }
