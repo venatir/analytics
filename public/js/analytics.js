@@ -119,8 +119,7 @@ function Chart(config) {
                     }).forEach(function (d) {
                         selectElem.add(myUtils.createElem('option', {"value": d}, d));
                     });
-                    control.append(selectElem);
-                    selectElem.change(function (value) {
+                    $(selectElem).change(function (value) {
                         if (value == 'all') {
                             that.dimensions[i].dimension.filterAll();
                             that.chart.redraw();
@@ -128,7 +127,8 @@ function Chart(config) {
                             that.dimensions[i].dimension.filterAll().filter(value);
                             that.chart.redraw();
                         }
-                    })
+                    });
+                    control.append(selectElem);
                 }
             }
         }
