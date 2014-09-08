@@ -120,6 +120,15 @@ function Chart(config) {
                         selectElem.add(myUtils.createElem('option', {"value": d}, d));
                     });
                     control.append(selectElem);
+                    selectElem.change(function (value) {
+                        if (value == 'all') {
+                            that.dimensions[i].dimension.filterAll();
+                            that.chart.redraw();
+                        } else {
+                            that.dimensions[i].dimension.filterAll().filter(value);
+                            that.chart.redraw();
+                        }
+                    })
                 }
             }
         }
@@ -225,7 +234,6 @@ function Chart(config) {
             //            this.refreshAll();
         }
     };
-
 }
 
 function EventsChart(config) {
