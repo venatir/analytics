@@ -107,7 +107,6 @@ function Chart(config) {
             selectElem,
             optionElem;
         control = $("#" + this.chartAnchor + ' .control');
-        control.append(myUtils.createElem('p'));
 
         if (this.dimensions && Array.isArray(this.dimensions)) {
             for (i = 0; i < this.dimensions.length; i++) {
@@ -119,19 +118,21 @@ function Chart(config) {
                     }).forEach(function (d) {
                         selectElem.add(myUtils.createElem('option', {"value": d}, d));
                     });
-                    $(selectElem).change(function (value) {
-                        if (value == 'all') {
-                            that.dimensions[i].dimension.filterAll();
-                            that.chart.redraw();
-                        } else {
-                            that.dimensions[i].dimension.filterAll().filter(value);
-                            that.chart.redraw();
-                        }
-                    });
                     control.append(selectElem);
                 }
             }
         }
+        $('select', '#' + this.chartAnchor).off().each(function (i, $selectElem) {
+            $selectElem.change(function (value) {
+                if (value == 'all') {
+                    that.dimensions[i].dimension.filterAll();
+                    that.chart.redraw();
+                } else {
+                    that.dimensions[i].dimension.filterAll().filter(value);
+                    that.chart.redraw();
+                }
+            });
+        });
 
         that.refreshChart();
     };
