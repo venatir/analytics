@@ -124,7 +124,7 @@ function Chart(config) {
         }
         $('select', '#' + this.chartAnchor).each(function (i, selectElem) {
             $(selectElem).off().change(function () {
-                if (value == 'all') {
+                if (this.value == 'all') {
                     that.dimensions[i].dimension.filterAll();
                     that.chart.redraw();
                 } else {
