@@ -123,12 +123,12 @@ function Chart(config) {
             }
         }
         $('select', '#' + this.chartAnchor).each(function (i, selectElem) {
-            $(selectElem).off().change(function (value) {
+            $(selectElem).off().change(function () {
                 if (value == 'all') {
                     that.dimensions[i].dimension.filterAll();
                     that.chart.redraw();
                 } else {
-                    that.dimensions[i].dimension.filterAll().filter(value);
+                    that.dimensions[i].dimension.filterAll().filter(this.value);
                     that.chart.redraw();
                 }
             });
