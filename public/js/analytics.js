@@ -122,8 +122,8 @@ function Chart(config) {
                 }
             }
         }
-        $('select', '#' + this.chartAnchor).off().each(function (i, $selectElem) {
-            $selectElem.change(function (value) {
+        $('select', '#' + this.chartAnchor).off().each(function (i, selectElem) {
+            $(selectElem).change(function (value) {
                 if (value == 'all') {
                     that.dimensions[i].dimension.filterAll();
                     that.chart.redraw();
