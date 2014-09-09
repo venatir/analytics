@@ -175,7 +175,7 @@ function Chart(config) {
         var i,
             temp;
         this.chart = dc.barChart("#" + this.chartAnchor);
-//        this.crossfilter = crossfilter();
+        this.crossfilter = crossfilter();
 //        for (i in config.chartParams.dimensionsNames) {
 //            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
 //
