@@ -208,7 +208,7 @@ function Chart(config) {
     };
     this.refreshChart = function (callback) {
         config.cutOff = new Date().getTime();
-        config.cutOff = config.cutOff - config.length;
+        config.cutOff = config.cutOff - config.chartParams.length;
         data = data.filter(function (d) {
             return d.t >= config.cutOff;
         });
