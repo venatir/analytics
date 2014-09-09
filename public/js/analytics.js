@@ -107,6 +107,8 @@ function Chart(config) {
             i,
             selectElem,
             optionElem;
+        that.refreshChart();
+
         control = $("#" + this.chartAnchor + ' .control');
 
         if (this.dimensions && Array.isArray(this.dimensions)) {
@@ -134,8 +136,6 @@ function Chart(config) {
                 }
             });
         });
-
-        that.refreshChart();
     };
     this.setChartAnchor = function (chartAnchor) {
         //noinspection JSLint
@@ -207,7 +207,8 @@ function Chart(config) {
         }
     };
     this.refreshChart = function (callback) {
-        var temp;
+        var i,
+            temp;
         config.cutOff = new Date().getTime();
         config.cutOff = config.cutOff - config.chartParams.length;
         data = data.filter(function (d) {
