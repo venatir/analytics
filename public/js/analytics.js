@@ -29,7 +29,8 @@ var myUtils = {
 };
 
 function Chart(config) {
-    var that = this;
+    var that = this,
+        data = [];
     this.addCharts = function (callback) {
 
         this.chart.width($("#" + this.chartAnchor).width())
@@ -206,6 +207,19 @@ function Chart(config) {
         }
     };
     this.refreshChart = function (callback) {
+        config.cutOff = new Date().getTime();
+        config.cutOff = config.cutOff - config.length;
+        data = data.filter(function (d) {
+            return d >= config.cutOff;
+        });
+        this.crossfilter = crossfilter(data);
+        this.dimensionTime = this.crossfilter.dimension(function (d) {
+            return d.t;
+        });
+        this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
+            return d.count; //TODO: make this variable
+        });
+        this.addCharts();
         this.chart.x(d3.scale.linear().domain([new Date().getTime() - config.chartParams.length, new Date().getTime()]));
         this.chart.render();
         if (callback) {
@@ -223,16 +237,15 @@ function Chart(config) {
                 }
             }
             delete doc.d;
-            this.crossfilter.add([doc]);
-
-            config.cutOff = new Date().getTime();
-            config.cutOff = config.cutOff - config.length;
-            this.dimensionTime.filterFunction(function (d) {
-                return d < config.cutOff;
-            });
-            this.crossfilter.remove();
-            this.dimensionTime.filterAll();
+//            this.crossfilter.add([doc]);
+            config.cutOff = new Date().getTime() - config.length;
+//            this.dimensionTime.filterFunction(function (d) {
+//                return d < config.cutOff;
+//            });
+//            this.crossfilter.remove();
+//            this.dimensionTime.filterAll();
             //            this.refreshAll();
+            data.push(doc);
         }
     };
 }
