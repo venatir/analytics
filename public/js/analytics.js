@@ -32,7 +32,7 @@ function Chart(config) {
     var that = this,
         data = [];
     this.addCharts = function (callback) {
-
+        this.chart = dc.barChart("#" + this.chartAnchor);
         this.chart.width($("#" + this.chartAnchor).width())
             .height(250)
             .margins({top: 10, right: 30, bottom: 60, left: 60})
@@ -125,6 +125,10 @@ function Chart(config) {
             }
         }
         $('select', '#' + this.chartAnchor).each(function (i, selectElem) {
+            if ($(selectElem).value != 'all') {
+                that.dimensions[i].dimension.filterAll().filter($(selectElem).value);
+                that.chart.redraw();
+            }
             $(selectElem).off().change(function () {
                 if (this.value == 'all') {
                     that.dimensions[i].dimension.filterAll();
@@ -161,20 +165,20 @@ function Chart(config) {
     this.start = function () {
         this.setChartAnchor(config.name);
         that.initHtml(function () {
-            that.initCustomForChart(function () {
-                that.addCharts(function () {
-                    that.initSocket(function () {
-                        that.resume();
-                    });
+//            that.initCustomForChart(function () {
+            that.addCharts(function () {
+                that.initSocket(function () {
+                    that.resume();
                 });
             });
+//            });
         });
     };
     this.dimensions = [];
     this.initCustomForChart = function (callback) {
         var i,
             temp;
-        this.chart = dc.barChart("#" + this.chartAnchor);
+//        this.chart = dc.barChart("#" + this.chartAnchor);
 //        this.crossfilter = crossfilter();
 //        for (i in config.chartParams.dimensionsNames) {
 //            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
