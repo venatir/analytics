@@ -125,7 +125,7 @@ function Chart(config) {
             }
         }
         $('select', '#' + this.chartAnchor).each(function (i, selectElem) {
-            if ($(selectElem).value != 'all') {
+            if (selectElem.value != 'all') {
                 that.dimensions[i].dimension.filterAll().filter($(selectElem).value);
                 that.chart.redraw();
             }
@@ -165,13 +165,11 @@ function Chart(config) {
     this.start = function () {
         this.setChartAnchor(config.name);
         that.initHtml(function () {
-//            that.initCustomForChart(function () {
             that.addCharts(function () {
                 that.initSocket(function () {
                     that.resume();
                 });
             });
-//            });
         });
     };
     this.dimensions = [];
