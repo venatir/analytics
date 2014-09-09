@@ -210,7 +210,7 @@ function Chart(config) {
         config.cutOff = new Date().getTime();
         config.cutOff = config.cutOff - config.length;
         data = data.filter(function (d) {
-            return d >= config.cutOff;
+            return d.t >= config.cutOff;
         });
         this.crossfilter = crossfilter(data);
         this.dimensionTime = this.crossfilter.dimension(function (d) {
@@ -238,7 +238,7 @@ function Chart(config) {
             }
             delete doc.d;
 //            this.crossfilter.add([doc]);
-            config.cutOff = new Date().getTime() - config.length;
+            config.cutOff = new Date().getTime() - config.chartParams.length;
 //            this.dimensionTime.filterFunction(function (d) {
 //                return d < config.cutOff;
 //            });
