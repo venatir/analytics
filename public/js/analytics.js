@@ -176,7 +176,7 @@ function Chart(config) {
         var i,
             temp;
         this.chart = dc.barChart("#" + this.chartAnchor);
-        this.crossfilter = crossfilter();
+//        this.crossfilter = crossfilter();
         for (i in config.chartParams.dimensionsNames) {
             if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
 
@@ -195,18 +195,19 @@ function Chart(config) {
                 }(i, temp));
             }
         }
-        this.dimensionTime = this.crossfilter.dimension(function (d) {
-            return d.t;
-        });
-        this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
-            return d.count; //TODO: make this variable
-        });
+//        this.dimensionTime = this.crossfilter.dimension(function (d) {
+//            return d.t;
+//        });
+//        this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
+//            return d.count; //TODO: make this variable
+//        });
 
         if (callback) {
             callback();
         }
     };
     this.refreshChart = function (callback) {
+        var temp;
         config.cutOff = new Date().getTime();
         config.cutOff = config.cutOff - config.chartParams.length;
         data = data.filter(function (d) {
@@ -219,6 +220,23 @@ function Chart(config) {
         this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
             return d.count; //TODO: make this variable
         });
+        for (i in config.chartParams.dimensionsNames) {
+            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
+                temp = {};
+                temp.name = i;
+                /*jshint -W083 */
+                //noinspection JSLint
+                (function (i, temp) {
+                    temp.dimension = that.crossfilter.dimension(
+                        function (d) {
+                            return d[i];
+                        }
+                    );
+                    temp.dimensionGroup = temp.dimension.group();
+                    that.dimensions.push(temp);
+                }(i, temp));
+            }
+        }
         this.addCharts();
         this.chart.x(d3.scale.linear().domain([new Date().getTime() - config.chartParams.length, new Date().getTime()]));
         this.chart.render();
