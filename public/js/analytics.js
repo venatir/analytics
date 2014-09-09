@@ -161,13 +161,13 @@ function Chart(config) {
     this.start = function () {
         this.setChartAnchor(config.name);
         that.initHtml(function () {
-//            that.initCustomForChart(function () {
+            that.initCustomForChart(function () {
                 that.addCharts(function () {
                     that.initSocket(function () {
                         that.resume();
                     });
                 });
-//            });
+            });
         });
     };
     this.dimensions = [];
@@ -175,7 +175,7 @@ function Chart(config) {
         var i,
             temp;
         this.chart = dc.barChart("#" + this.chartAnchor);
-        this.crossfilter = crossfilter();
+//        this.crossfilter = crossfilter();
 //        for (i in config.chartParams.dimensionsNames) {
 //            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
 //
