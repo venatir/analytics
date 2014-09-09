@@ -221,6 +221,7 @@ function Chart(config) {
         this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
             return d.count; //TODO: make this variable
         });
+        this.dimensions = [];
         for (i in config.chartParams.dimensionsNames) {
             if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
                 temp = {};
