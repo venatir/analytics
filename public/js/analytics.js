@@ -105,8 +105,7 @@ function Chart(config) {
     this.refreshAll = function () {
         var control,
             i,
-            selectElem,
-            optionElem;
+            selectElem;
         that.refreshChart();
 
         control = $("#" + this.chartAnchor + ' .control');
@@ -162,13 +161,13 @@ function Chart(config) {
     this.start = function () {
         this.setChartAnchor(config.name);
         that.initHtml(function () {
-            that.initCustomForChart(function () {
+//            that.initCustomForChart(function () {
                 that.addCharts(function () {
                     that.initSocket(function () {
                         that.resume();
                     });
                 });
-            });
+//            });
         });
     };
     this.dimensions = [];
@@ -176,25 +175,25 @@ function Chart(config) {
         var i,
             temp;
         this.chart = dc.barChart("#" + this.chartAnchor);
-        this.crossfilter = crossfilter();
-        for (i in config.chartParams.dimensionsNames) {
-            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
-
-                temp = {};
-                temp.name = i;
-                /*jshint -W083 */
-                //noinspection JSLint
-                (function (i, temp) {
-                    temp.dimension = that.crossfilter.dimension(
-                        function (d) {
-                            return d[i];
-                        }
-                    );
-                    temp.dimensionGroup = temp.dimension.group();
-                    that.dimensions.push(temp);
-                }(i, temp));
-            }
-        }
+//        this.crossfilter = crossfilter();
+//        for (i in config.chartParams.dimensionsNames) {
+//            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
+//
+//                temp = {};
+//                temp.name = i;
+//                /*jshint -W083 */
+//                //noinspection JSLint
+//                (function (i, temp) {
+//                    temp.dimension = that.crossfilter.dimension(
+//                        function (d) {
+//                            return d[i];
+//                        }
+//                    );
+//                    temp.dimensionGroup = temp.dimension.group();
+//                    that.dimensions.push(temp);
+//                }(i, temp));
+//            }
+//        }
 //        this.dimensionTime = this.crossfilter.dimension(function (d) {
 //            return d.t;
 //        });
