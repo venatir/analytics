@@ -49,12 +49,6 @@ function Chart(config) {
             .x(d3.scale.linear().domain([new Date().getTime() - config.chartParams.length, new Date().getTime()]))
             .renderHorizontalGridLines(true);
         this.formatChart();
-        // customize the filter displayed in the control span
-        //            .filterPrinter(function (filters) {
-        //                var filter = filters[0], s = "";
-        //                s += numberFormat(filter[0]) + "% -> " + numberFormat(filter[1]) + "%";
-        //                return s;
-        //            });
 
         if (callback) {
             callback();
@@ -173,40 +167,6 @@ function Chart(config) {
         });
     };
     this.dimensions = [];
-    this.initCustomForChart = function (callback) {
-        var i,
-            temp;
-//        this.chart = dc.barChart("#" + this.chartAnchor);
-//        this.crossfilter = crossfilter();
-//        for (i in config.chartParams.dimensionsNames) {
-//            if (config.chartParams.dimensionsNames.hasOwnProperty(i)) {
-//
-//                temp = {};
-//                temp.name = i;
-//                /*jshint -W083 */
-//                //noinspection JSLint
-//                (function (i, temp) {
-//                    temp.dimension = that.crossfilter.dimension(
-//                        function (d) {
-//                            return d[i];
-//                        }
-//                    );
-//                    temp.dimensionGroup = temp.dimension.group();
-//                    that.dimensions.push(temp);
-//                }(i, temp));
-//            }
-//        }
-//        this.dimensionTime = this.crossfilter.dimension(function (d) {
-//            return d.t;
-//        });
-//        this.dimensionTimeGroup = this.dimensionTime.group().reduceSum(function (d) {
-//            return d.count; //TODO: make this variable
-//        });
-
-        if (callback) {
-            callback();
-        }
-    };
     this.refreshChart = function (callback) {
         var i,
             temp;
