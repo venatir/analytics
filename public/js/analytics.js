@@ -38,6 +38,7 @@ function Chart(config) {
             .margins({top: 10, right: 30, bottom: 60, left: 60})
             .dimension(this.dimensionTime)
             .group(this.dimensionTimeGroup)
+            .brushOn(false)
             .elasticY(true)
             // (optional) whether bar should be center to its x value. Not needed for ordinal chart, :default=false
             .centerBar(true)
